@@ -35,13 +35,14 @@ export default function AuthListener() {
           // eslint-disable-next-line no-console
           console.error("Failed to persist user:", err);
         }
+      } else {
+        // User not signed in
+        if (pathname === "/home") {
+          console.log("Redirecting to /");
+          console.log("No user signed in");
+          router.replace("/");
+        }
       }
-        else if (pathname === "/home") {
-        console.log("Redirecting to /");
-        console.log("No user signed in");
-        router.replace("/");
-      }
-      
     });
 
     return () => unsubscribe();
