@@ -1,4 +1,4 @@
-import BottomNavBar from "@/components/bottom-nav-bar";
+import BottomNavBar from "@/components/ui/bottom-nav-bar";
 
 export default function LoginLayout({ children }) {
   return (
