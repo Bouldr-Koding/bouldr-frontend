@@ -6,10 +6,10 @@ export default function GoogleSignInButton({ className = "w-full flex items-cent
     e.preventDefault();
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
-      await firebase.auth().signInWithRedirect(provider);
+      await firebase.auth().signInWithPopup(provider);
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error('Google sign-in redirect failed', err);
+      console.error('Google sign-in Popup failed', err);
     }
   };
 

@@ -15,11 +15,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-// DEBUG: print the resolved Firebase app options at runtime to help debug
-// auth/configuration-not-found errors. Remove this log after verifying.
-// eslint-disable-next-line no-console
-console.log('Firebase initialized with options:', firebase.app().options);
-
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export default firebase;
