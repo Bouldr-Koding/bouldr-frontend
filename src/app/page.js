@@ -4,9 +4,9 @@ import { Typewriter } from "@/components/ui/typewriter-text";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+    <div className="flex min-h-screen items-center justify-center bg-background text-foreground font-sans">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-card text-card-foreground sm:items-start">
+        <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-card-foreground">
             Bouldr
         </h1>
         <Typewriter
@@ -16,7 +16,7 @@ export default function Home() {
                 className="text-xl font-medium"
         />
           {/* Login Button: Need to change this to proper Authentication if the backend completes */}
-          <Link href="/home" className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+          <Link href="/home" className="w-full flex items-center justify-center gap-x-3 py-2.5 border border-border rounded-lg bg-card text-card-foreground hover:bg-muted duration-150 active:bg-muted">
             <svg
               className="w-5 h-5"
               viewBox="0 0 533.5 544.3"
