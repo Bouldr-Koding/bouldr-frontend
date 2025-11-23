@@ -2,7 +2,54 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import firebase from "@/lib/firebase";
-import { db } from "@/lib/firebase";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+async function ensureUserRegistered(firebaseUser) {
+  if (!API_BASE) {
+    throw new Error("NEXT_PUBLIC_API_BASE_URL is not configured");
+  }
+
+  const token = await firebaseUser.getIdToken();
+  const headers = { Authorization: `Bearer ${token}` };
+
+  // Check if user exists in backend DB
+  const existsRes = await fetch(`${API_BASE}/users/registration/exists/${firebaseUser.uid}`, {
+    headers,
+  });
+
+  if (existsRes.ok) return true;
+  if (existsRes.status !== 404) {
+    throw new Error(`Lookup failed with status ${existsRes.status}`);
+  }
+
+  // Create user if missing
+  const payload = {
+    createdAt: new Date().toISOString(),
+    displayName: firebaseUser.displayName ?? null,
+    email: firebaseUser.email ?? null,
+    stats: {
+      hardestGrade: "V0",
+      totalPoints: 0,
+      totalSends: 0,
+    },
+  };
+
+  const createRes = await fetch(
+    `${API_BASE}/users/registration/create/${firebaseUser.uid}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...headers },
+      body: JSON.stringify(payload),
+    },
+  );
+
+  if (!createRes.ok) {
+    throw new Error(`Create failed with status ${createRes.status}`);
+  }
+
+  return true;
+}
 
 export default function AuthListener() {
   const router = useRouter();
@@ -14,26 +61,15 @@ export default function AuthListener() {
       if (user) {
         console.log("User signed in:", user.uid);
         try {
-          // const userRef = db.collection("users").doc(user.uid);
-          // void userRef.set(
-          //   {
-          //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          //     displayName: user.displayName || null,
-          //     email: user.email || null,
-          //     stats: {
-          //       hardestGrade: "V0",
-          //       totalPoints: 0,
-          //       totalSends: 0,
-          //     },
-          //   },
-          // );
-          if (pathname !== "/home") {
+          await ensureUserRegistered(user);
+          // Only redirect to /home when a signed-in user is on the landing page
+          if (pathname === "/") {
             console.log("Redirecting to /home");
             router.replace("/home");
           }
         } catch (err) {
           // eslint-disable-next-line no-console
-          console.error("Failed to persist user:", err);
+          console.error("Failed to ensure user registration:", err);
         }
       } else {
         // User not signed in
@@ -48,5 +84,5 @@ export default function AuthListener() {
     return () => unsubscribe();
   }, [pathname, router]);
 
-  return null;
+  return null;
 }
