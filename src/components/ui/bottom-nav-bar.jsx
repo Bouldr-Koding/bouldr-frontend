@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 import { motion } from "framer-motion";
-import { Home, Map, Dumbbell } from "lucide-react";
+import { Home, Map, Dumbbell, CircleUser } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ const navItems = [
   { label: "Home", icon: Home, href: "/home" },
   { label: "Gym", icon: Dumbbell, href: "/gym" },
   { label: "Routes", icon: Map, href: "/routes" },
+  { label: "Profile", icon: CircleUser, href: "/profile" },
 ];
 
 const MOBILE_LABEL_WIDTH = 72;

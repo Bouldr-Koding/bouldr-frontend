@@ -13,17 +13,6 @@ async function ensureUserRegistered(firebaseUser) {
   const token = await firebaseUser.getIdToken();
   const headers = { Authorization: `Bearer ${token}` };
 
-  // Check if user exists in backend DB
-  const existsRes = await fetch(`${API_BASE}/users/registration/exists/${firebaseUser.uid}`, {
-    headers,
-  });
-
-  if (existsRes.ok) return true;
-  if (existsRes.status !== 404) {
-    throw new Error(`Lookup failed with status ${existsRes.status}`);
-  }
-
-  // Create user if missing
   const payload = {
     createdAt: new Date().toISOString(),
     displayName: firebaseUser.displayName ?? null,
